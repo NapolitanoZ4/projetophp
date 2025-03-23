@@ -5,11 +5,11 @@
 </head>
 
 <body>
-    <form action="teste.php" method="post">
+    <form action="login.php" method="post">
 
-        Nome: <input type="text" name="nome"> <!--CAMPO NOME COM TIPO TEXTO E NAME = NOME-->
-        Idade: <input type="text" name="idade">
-        <input type="submit" value="validar">
+        Usuário: <input type="text" name="usuario"> <!--CAMPO NOME COM TIPO TEXTO E NAME = usuario-->
+        Senha: <input type="text" name="senha">
+        <input type="submit" value="ENVIAR">
 
         
 
