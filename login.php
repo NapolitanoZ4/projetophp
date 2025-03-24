@@ -1,22 +1,35 @@
-<?php
+<?php 
 
-if (!isset($_POST['usuario']) || $_POST['usuario'] == '') {
-    die("FAVOR INFORMAR UMA SENHA");
+include("conexao.php");
+
+$cpf=$_POST['cpf'];
+$senha=$_POST['senha'];
+
+if (!isset($_POST['cpf']) || $_POST['cpf'] == '') {
+    die("favor informar um CPF");
 }
-
 
 if (!isset($_POST['senha']) || $_POST['senha'] == '') {
-    die("FAVOR INFORMAR UMA SENHA");
+    die("favor informar uma senha");
 }
 
-if($_POST['usuario'] == '123' && $_POST['senha'] == '123'){
+$sql = "select nome from usuarios where cpf='$cpf' and senha='$senha'";
+
+$resultado =  $conn->query($sql);
+$row = $resultado->fetch_assoc();
+
+if (isset($row) && $row['nome'] != '') {
     session_start();
 
-    $_SESSION['usuario'] = $_POST['usuario'];
-    $_SESSION['senha'] = $_POST['senha'];
-
-    header("Location: peincipal.php");
-    die;
+    $_SESSION["nome"] =$cpf;
+    $_SESSION["senha"] =$senha;
+    $_SESSION["nome"] = $row['nome'];
+    header("Location: principal.php");
 }else{
-    die("USUARIO E SENHA INVALIDOS");
+    echo "SENHA INCORRETA";
 }
+
+
+
+
+?>

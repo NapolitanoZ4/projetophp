@@ -1,8 +1,7 @@
 <?php 
-session_start();
 include("autenticacao.php");
 
-echo "USUÁRIO: ".$_SESSION['usuario'].'<br>';
-echo "SENHA: ".$_SESSION['senha'];
-
+echo "CPF: ".$_SESSION['cpf'].'<br>';
+echo "NOME: ".$_SESSION['nome'].'<br>';
+echo "SENHA: ".$_SESSION['senha'].'<br>';
 ?>

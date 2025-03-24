@@ -2,17 +2,14 @@
 
 session_start();
 
-if (!isset($_POST['usuario']) || $_POST['usuario'] == '') {
+if (!isset($_SESSION['cpf']) || $_SESSION['cpf'] == '') {
     header("Location: index.php");
     die;
 }
 
-
-if (!isset($_POST['senha']) || $_POST['senha'] == '') {
+if (!isset($_SESSION['senha']) || $_SESSION['senha'] == '' ) {
     header("Location: index.php");
     die;
 }
-
-
 
 ?>
