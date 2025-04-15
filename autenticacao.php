@@ -1,15 +1,20 @@
-<?php 
-
+<?php
 session_start();
+include("conexao.php");
 
-if (!isset($_SESSION['cpf']) || $_SESSION['cpf'] == '') {
-    header("Location: index.php");
-    die;
+$cpf = $_POST['cpf'];
+$senha = $_POST['senha'];
+
+$sql = "SELECT * FROM usuarios WHERE cpf='$cpf' AND senha='$senha'";
+$result = $conn->query($sql);
+
+if ($result->num_rows == 1) {
+    $usuario = $result->fetch_assoc();
+    $_SESSION['nome'] = $usuario['nome'];
+    $_SESSION['cpf'] = $usuario['cpf'];
+    header("Location: principal.php");
+} else {
+    echo "CPF ou senha incorretos!";
 }
-
-if (!isset($_SESSION['senha']) || $_SESSION['senha'] == '' ) {
-    header("Location: index.php");
-    die;
-}
-
+$conn->close();
 ?>

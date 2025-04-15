@@ -1,25 +1,31 @@
 <?php 
-include("autenticacao.php");
-
-echo "CPF: ".$_SESSION['cpf'].'<br>';
-echo "NOME: ".$_SESSION['nome'].'<br>';
-echo "SENHA: ".$_SESSION['senha'].'<br>';
+session_start();
+if (!isset($_SESSION['cpf'])) {
+    header("Location: login.php");
+    exit;
+}
 ?>
 
-<div style="width: 800px; margin: 0 auto;";>
-        <div style="min-height: 100px; width: 100%; background-color: #4caf50";>
-            <div style="width: 50%; float: left">
-                <span style="padding-left: 10px;"> Olá <?=$_SESSION['cpf'];?></span>
-            </div>
-
-            <div style="width: 50%; float:left; text-align:right;">
-                <span style="background-color:blue; margin-right: 10px;"><a href="sair.php">
-                    <font color="black">SAIR</font></a></span>
-            </div>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal</title>
+    <link rel="stylesheet" type="text/css" href="principal.css">
+</head>
+<body>
+    <header>
+        <div class="info">
+            <h2>Bem-vindo, <?php echo $_SESSION['nome']; ?></h2>
+            <p>CPF: <?php echo $_SESSION['cpf']; ?></p>
         </div>
-        <div id="menu" style="width: 200px; background-color: #f4f4f4; min-height: 400px; float: left;">
-            <h2>MENU</h2>
-            
-        </div>
+        <a href="sair.php" class="sair-btn">Sair</a>
+    </header>
 
+    <div class="container">
+        <!-- Conteúdo da página -->
+        <p>Conteúdo principal da página...</p>
     </div>
+</body>
+</html>

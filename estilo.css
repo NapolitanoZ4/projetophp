@@ -1,0 +1,74 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: url('imagens/folhas.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.caixa-login {
+    background: rgba(40, 40, 40, 0.3); /* fundo semi-transparente escuro */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    width: 280px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+
+.caixa-login h2 {
+    color: #e0e0e0;
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 12px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+input[type="text"],
+input[type="password"] {
+    background-color: rgba(230, 230, 230, 0.8);
+    color: #333;
+}
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
+    color: #666;
+}
+
+input[type="submit"] {
+    background-color: #555;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    border: 2px solid #444;
+}
+
+input[type="submit"]:hover {
+    background-color: #333;
+    border-color: #222;
+}
+
+a {
+    color: #cccccc;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+a:hover {
+    text-decoration: underline;
+}

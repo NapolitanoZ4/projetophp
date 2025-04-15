@@ -1,35 +1,49 @@
-<?php 
-
-include("conexao.php");
-
-$cpf=$_POST['cpf'];
-$senha=$_POST['senha'];
-
-if (!isset($_POST['cpf']) || $_POST['cpf'] == '') {
-    die("favor informar um CPF");
-}
-
-if (!isset($_POST['senha']) || $_POST['senha'] == '') {
-    die("favor informar uma senha");
-}
-
-$sql = "select nome from usuarios where cpf='$cpf' and senha='$senha'";
-
-$resultado =  $conn->query($sql);
-$row = $resultado->fetch_assoc();
-
-if (isset($row) && $row['nome'] != '') {
-    session_start();
-
-    $_SESSION["nome"] =$cpf;
-    $_SESSION["senha"] =$senha;
-    $_SESSION["nome"] = $row['nome'];
-    header("Location: principal.php");
-}else{
-    echo "SENHA INCORRETA";
-}
-
-
-
-
+<?php
+session_start();
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="estilo.css">
+</head>
+<body>
+
+<div class="caixa-login">
+    <h2>Login</h2>
+    <form method="post" action="">
+        <input type="text" name="cpf" placeholder="CPF" required><br>
+        <input type="password" name="senha" placeholder="Senha" required><br>
+        <input type="submit" value="Entrar">
+    </form>
+    <p>Não tem conta? <a href="index.php">Cadastre-se</a></p>
+
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        include("conexao.php");
+
+        $cpf = $_POST['cpf'];
+        $senha = $_POST['senha'];
+
+        $sql = "SELECT * FROM usuarios WHERE cpf = '$cpf' AND senha = '$senha'";
+        $resultado = $conn->query($sql);
+
+        if ($resultado->num_rows == 1) {
+            $usuario = $resultado->fetch_assoc();
+            $_SESSION['nome'] = $usuario['nome'];
+            $_SESSION['cpf'] = $usuario['cpf'];
+            header("Location: principal.php");
+            exit;
+        } else {
+            echo "<p style='color: red;'>CPF ou senha inválidos.</p>";
+        }
+
+        $conn->close();
+    }
+    ?>
+</div>
+
+</body>
+</html>
