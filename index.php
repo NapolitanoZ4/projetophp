@@ -15,7 +15,7 @@ session_start();
     <h2>Cadastro</h2>
     <form method="post" action="">
         <input type="text" name="nome" placeholder="Nome" required><br>
-        <input type="text" name="sobrenome" placeholder="Sobrenome" required><br> <!-- Campo para sobrenome -->
+        <input type="text" name="sobrenome" placeholder="Sobrenome" required><br> 
         <input type="text" name="cpf" placeholder="CPF" required><br>
         <input type="password" name="senha" placeholder="Senha" required><br>
         <input type="submit" value="Cadastrar">
@@ -27,11 +27,11 @@ session_start();
         include("conexao.php");
 
         $nome = $_POST['nome'];
-        $sobrenome = $_POST['sobrenome']; // Pegando o sobrenome
+        $sobrenome = $_POST['sobrenome']; 
         $cpf = $_POST['cpf'];
         $senha = $_POST['senha'];
 
-        // Verifica se já existe um usuário com o mesmo CPF
+        // Verifica de CPF
         $verifica = $conn->query("SELECT * FROM usuarios WHERE cpf = '$cpf'");
 
         if ($verifica->num_rows > 0) {

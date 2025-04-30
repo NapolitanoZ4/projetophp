@@ -27,8 +27,11 @@ session_start();
         $cpf = $_POST['cpf'];
         $senha = $_POST['senha'];
 
-        $sql = "SELECT * FROM usuarios WHERE cpf = '$cpf' AND senha = '$senha'";
-        $resultado = $conn->query($sql);
+        // Usa declaração preparada para evitar SQL Injection
+        $stmt = $conn->prepare("SELECT nome, cpf FROM usuarios WHERE cpf = ? AND senha = ?");
+        $stmt->bind_param("ss", $cpf, $senha); // "ss" significa que os dois parâmetros são strings
+        $stmt->execute();
+        $resultado = $stmt->get_result();
 
         if ($resultado->num_rows == 1) {
             $usuario = $resultado->fetch_assoc();
@@ -40,6 +43,7 @@ session_start();
             echo "<p style='color: red;'>CPF ou senha inválidos.</p>";
         }
 
+        $stmt->close();
         $conn->close();
     }
     ?>
