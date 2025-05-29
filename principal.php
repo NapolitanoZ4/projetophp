@@ -26,9 +26,12 @@ if (!isset($_SESSION['cpf'])) {
     <div class="painel">
         <div class="menu-lateral">
             <h2>Menu</h2>
-            <a href="login.php">Cadastro</a>  
-            <a href="#">Item 2</a>
+            <a href="cadastroUsuario.php">Cadastro Usuarios</a>  
+            <a href="cadastroFilme.php">Cadastro Filmes</a>
             <a href="#">Item 3</a>
+            <a href="#">Item 4</a>
+            <a href="#">Item 5</a>
+            <a href="#">Item 6</a>
         </div>
 
         <div class="conteudo-principal">
