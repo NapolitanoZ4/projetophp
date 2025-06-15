@@ -3,22 +3,28 @@ session_start();
 include("autenticacao.php");
 include("conexao.php");
 
-// CONEXÃO  ---------------------------------------------------------------------------------------------------
-$host = "localhost";  // deixa desse jeito
-$user = "root";       // deixa desse jeito
-$pass = "";           // deixa desse jeito
-$db = "cadastro_filmes"; // nome do seu banco de dados
+// CONEXÃO
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db = "cadastro_filmes";
 
 $conn = new mysqli($host, $user, $pass, $db);
 if ($conn->connect_error) {
     die("Falha na conexão: " . $conn->connect_error);
 }
 
-// Inserir filme  ----------------------------------------------------------------------------------------------------------------
+// INSERIR FILME
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['acao'] === 'inserir') {
     $nome = $_POST['nome'];
     $ano = $_POST['ano'];
     $genero = $_POST['genero'];
+
+    // Validação de ano
+    if (!is_numeric($ano) || $ano < 1888 || $ano > 2025) {
+        echo "<script>alert('Ano inválido! O ano deve estar entre 1888 e 2025.'); window.location.href='cadastroFilme.php';</script>";
+        exit;
+    }
 
     $sql = "INSERT INTO filmes (filme, nome, genero_id, ano) VALUES (NULL, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
@@ -30,12 +36,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
     }
 }
 
-// Alterar filme  -----------------------------------------------------------------------------------------------------------------
+// ALTERAR FILME
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['acao'] === 'alterar') {
     $filme = $_POST['filme'];
     $nome = $_POST['nome'];
     $ano = $_POST['ano'];
     $generoId = $_POST['genero'];
+
+    // Validação de ano
+    if (!is_numeric($ano) || $ano < 1888 || $ano > 2025) {
+        echo "<script>alert('Ano inválido! O ano deve estar entre 1888 e 2025.'); window.location.href='cadastroFilme.php';</script>";
+        exit;
+    }
 
     $sql = "UPDATE filmes SET nome=?, genero_id=?, ano=? WHERE filme=?";
     $stmt = $conn->prepare($sql);
@@ -47,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
     }
 }
 
-// Apagar filme  --------------------------------------------------------------------------------------------------------------------
+// APAGAR FILME
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['acao'] === 'apagar') {
     $filme = $_POST['filme'];
     $sql = "DELETE FROM filmes WHERE filme = ?";
@@ -61,13 +73,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
 }
 ?>
 
-<!--  Aqui começa a parte HTML (fora do PHP) -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <title>Cadastro de Filmes</title>
-
     <link rel="stylesheet" href="cadastroFilme.css">
 </head>
 <body>
@@ -76,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
             <span>Bem-vindo, <?= $_SESSION['nome']; ?></span>
         </div>
         <div class="user-area">
-            <form action="sair.php" method="post">
+            <form action="principal.php" method="post">
                 <button type="submit">Sair</button>
             </form>
         </div>
@@ -94,9 +104,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
             <h2 class="title">Cadastro de Filmes</h2>
             <form action="cadastroFilme.php" method="post">
                 <input type="hidden" name="acao" value="inserir">
-                <div class="nome"><input type="text" name="nome" placeholder="Nome"></div>
-                <div class="ano"><input type="text" name="ano" placeholder="Ano"></div>
-                <select name="genero">
+                <div class="nome">
+                    <input type="text" name="nome" placeholder="Nome" required>
+                </div>
+                <div class="ano">
+                    <input type="number" name="ano" placeholder="Ano" min="1888" max="2025" required>
+                </div>
+                <select name="genero" required>
                     <option value="">Selecione um Gênero</option>
                     <?php
                     $generos = $conn->query("SELECT * FROM generos WHERE status = 1");
@@ -118,15 +132,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
                 </tr>
                 <?php
                 $filmes = $conn->query("SELECT filmes.*, generos.genero FROM filmes INNER JOIN generos ON filmes.genero_id = generos.genero_id");
-                while ($row = $filmes->fetch_assoc()) {
+                while ($row = $filmes->fetch_assoc()) :
                 ?>
                     <tr>
                         <form method="post" action="cadastroFilme.php">
                             <input type="hidden" name="acao" value="alterar">
                             <input type="hidden" name="filme" value="<?= $row['filme'] ?>">
-                            <td><input type="text" name="nome" value="<?= $row['nome'] ?>"></td>
+                            <td><input type="text" name="nome" value="<?= $row['nome'] ?>" required></td>
                             <td>
-                                <select name="genero">
+                                <select name="genero" required>
                                     <?php
                                     $generos = $conn->query("SELECT * FROM generos WHERE status = 1");
                                     while ($g = $generos->fetch_assoc()) {
@@ -136,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
                                     ?>
                                 </select>
                             </td>
-                            <td><input type="text" name="ano" value="<?= $row['ano'] ?>"></td>
+                            <td><input type="number" name="ano" min="1888" max="2025" value="<?= $row['ano'] ?>" required></td>
                             <td><input type="submit" value="Alterar" class="buton"></td>
                         </form>
                         <form method="post" action="cadastroFilme.php">
@@ -145,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
                             <td><input type="submit" value="Apagar" class="buton"></td>
                         </form>
                     </tr>
-                <?php } ?>
+                <?php endwhile; ?>
             </table>
         </div>
     </main>
